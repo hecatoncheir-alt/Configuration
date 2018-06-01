@@ -72,7 +72,7 @@ func New() *Configuration {
 
 	serviceName := os.Getenv("Service-Name")
 	if serviceName == "" {
-		configuration.ServiceName = "Initial"
+		configuration.ServiceName = ""
 	} else {
 		configuration.ServiceName = serviceName
 	}
