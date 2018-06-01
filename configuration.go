@@ -34,6 +34,11 @@ type Configuration struct {
 			Host string
 			Port int
 		}
+
+		Database struct {
+			Host string
+			Port int
+		}
 	}
 
 	Development struct {
@@ -53,6 +58,11 @@ type Configuration struct {
 		}
 
 		SocketServer struct {
+			Host string
+			Port int
+		}
+
+		Database struct {
 			Host string
 			Port int
 		}
@@ -77,6 +87,7 @@ func New() *Configuration {
 		configuration.ServiceName = serviceName
 	}
 
+	// Services production
 	productionInitialTopic := os.Getenv("Production-Initial-Topic")
 	if productionInitialTopic == "" {
 		configuration.Production.InitialTopic = "Initial"
@@ -105,6 +116,7 @@ func New() *Configuration {
 		configuration.Production.HecatoncheirTopic = productionHecatoncheirTopic
 	}
 
+	// Services Development
 	developmentInitialTopic := os.Getenv("Development-Initial-Topic")
 	if developmentInitialTopic == "" {
 		configuration.Development.InitialTopic = "DevInitial"
@@ -133,6 +145,7 @@ func New() *Configuration {
 		configuration.Development.HecatoncheirTopic = developmentHecatoncheirTopic
 	}
 
+	// Broker Production
 	productionBrokerHostFromEnvironment := os.Getenv("Production-Broker-Host")
 	if productionBrokerHostFromEnvironment == "" {
 		configuration.Production.Broker.Host = "192.168.99.100"
@@ -256,6 +269,46 @@ func New() *Configuration {
 		}
 
 		configuration.Development.SocketServer.Port = port
+	}
+
+	// Database Production
+	productionDatabaseHostFromEnvironment := os.Getenv("Production-Database-Host")
+	if productionDatabaseHostFromEnvironment == "" {
+		configuration.Production.Database.Host = "192.168.99.100"
+	} else {
+		configuration.Production.Database.Host = productionDatabaseHostFromEnvironment
+	}
+
+	productionDatabasePortFromEnvironment := os.Getenv("Production-Database-Port")
+	if productionDatabasePortFromEnvironment == "" {
+		configuration.Production.Database.Port = 9080
+	} else {
+		port, err := strconv.Atoi(productionDatabasePortFromEnvironment)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		configuration.Production.Database.Port = port
+	}
+
+	// Database Development
+	developmentDatabaseHostFromEnvironment := os.Getenv("Development-Database-Host")
+	if developmentDatabaseHostFromEnvironment == "" {
+		configuration.Development.Database.Host = "192.168.99.100"
+	} else {
+		configuration.Development.Database.Host = developmentDatabaseHostFromEnvironment
+	}
+
+	developmentDatabasePortFromEnvironment := os.Getenv("Development-Database-Port")
+	if developmentDatabasePortFromEnvironment == "" {
+		configuration.Development.Database.Port = 9080
+	} else {
+		port, err := strconv.Atoi(developmentDatabasePortFromEnvironment)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		configuration.Development.Database.Port = port
 	}
 
 	return &configuration
