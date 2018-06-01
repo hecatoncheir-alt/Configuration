@@ -7,14 +7,17 @@ import (
 	"github.com/prometheus/common/log"
 )
 
+// Configuration is a structure of environment settings for services
+// and topics channel name.
 type Configuration struct {
 	APIVersion,
 	ServiceName string
 
 	Production struct {
-		InitialTopic string
-		SprootTopic  string
-		LogunaTopic  string
+		InitialTopic      string
+		SprootTopic       string
+		LogunaTopic       string
+		HecatoncheirTopic string
 
 		Broker struct {
 			Host string
@@ -34,9 +37,10 @@ type Configuration struct {
 	}
 
 	Development struct {
-		InitialTopic string
-		SprootTopic  string
-		LogunaTopic  string
+		InitialTopic,
+		SprootTopic,
+		LogunaTopic,
+		HecatoncheirTopic string
 
 		Broker struct {
 			Host string
@@ -55,6 +59,7 @@ type Configuration struct {
 	}
 }
 
+// New a constructor for *Configuration
 func New() *Configuration {
 	configuration := Configuration{}
 
@@ -93,6 +98,13 @@ func New() *Configuration {
 		configuration.Production.LogunaTopic = productionLogunaTopic
 	}
 
+	productionHecatoncheirTopic := os.Getenv("Production-Hecatoncheir-Topic")
+	if productionHecatoncheirTopic == "" {
+		configuration.Production.HecatoncheirTopic = "Hecatoncheir"
+	} else {
+		configuration.Production.HecatoncheirTopic = productionHecatoncheirTopic
+	}
+
 	developmentInitialTopic := os.Getenv("Development-Initial-Topic")
 	if developmentInitialTopic == "" {
 		configuration.Development.InitialTopic = "DevInitial"
@@ -112,6 +124,13 @@ func New() *Configuration {
 		configuration.Development.LogunaTopic = "DevLoguna"
 	} else {
 		configuration.Development.LogunaTopic = developmentLogunaTopic
+	}
+
+	developmentHecatoncheirTopic := os.Getenv("Development-Hecatoncheir-Topic")
+	if developmentHecatoncheirTopic == "" {
+		configuration.Development.HecatoncheirTopic = "DevHecatoncheir"
+	} else {
+		configuration.Development.HecatoncheirTopic = developmentHecatoncheirTopic
 	}
 
 	productionBrokerHostFromEnvironment := os.Getenv("Production-Broker-Host")
