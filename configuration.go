@@ -17,6 +17,7 @@ type Configuration struct {
 		InitialTopic      string
 		SprootTopic       string
 		LogunaTopic       string
+		LogFilePath       string
 		HecatoncheirTopic string
 
 		Broker struct {
@@ -45,6 +46,7 @@ type Configuration struct {
 		InitialTopic,
 		SprootTopic,
 		LogunaTopic,
+		LogFilePath,
 		HecatoncheirTopic string
 
 		Broker struct {
@@ -309,6 +311,21 @@ func New() *Configuration {
 		}
 
 		configuration.Development.Database.Port = port
+	}
+
+	// LogFilePath
+	productionLogFilePath := os.Getenv("Production-Log-File-Path")
+	if productionLogFilePath == "" {
+		configuration.Production.LogFilePath = "log"
+	} else {
+		configuration.Production.LogFilePath = productionLogFilePath
+	}
+
+	developmentLogFilePath := os.Getenv("Development-Log-File-Path")
+	if developmentLogFilePath == "" {
+		configuration.Development.LogFilePath = "dev_log"
+	} else {
+		configuration.Development.LogFilePath = developmentLogFilePath
 	}
 
 	return &configuration
