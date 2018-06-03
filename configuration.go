@@ -157,7 +157,7 @@ func New() *Configuration {
 
 	productionBrokerPortFromEnvironment := os.Getenv("Production-Broker-Port")
 	if productionBrokerPortFromEnvironment == "" {
-		configuration.Production.Broker.Port = 4150
+		configuration.Production.Broker.Port = 4222
 	} else {
 		port, err := strconv.Atoi(productionBrokerPortFromEnvironment)
 		if err != nil {
@@ -223,7 +223,7 @@ func New() *Configuration {
 
 	developmentBrokerPortFromEnvironment := os.Getenv("Development-Broker-Port")
 	if developmentBrokerPortFromEnvironment == "" {
-		configuration.Development.Broker.Port = 4150
+		configuration.Development.Broker.Port = 4222
 	} else {
 		port, err := strconv.Atoi(developmentBrokerPortFromEnvironment)
 		if err != nil {
